@@ -1,12 +1,24 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
+    <title>CodeCollab</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="{{ site.description }}">
-    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+
+    <!-- JavaScript Libraries -->
+    <script type="text/javascript" src='/js/libraries/angular.min.js'></script>
+    <script type="text/javascript" src='/js/libraries/firebase.js'></script>
+    <script type="text/javascript" src='/js/libraries/angularfire.min.js'></script>
+    <script type="text/javascript" src='/js/libraries/firebase-simple-login.js'></script>
+    <script type="text/javascript" src='/js/libraries/jquery-1.11.1.min.js'></script>
+    <script type="text/javascript" src='/js/libraries/ui-bootstrap-tpls-0.11.0.min.js'></script>
+
+    <!-- CSS Libraries -->
+    <link rel='stylesheet' href='/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='/css/bootstrap-theme.css'>
+    <link rel='stylesheet' href='/css/font-awesome-4.1.0/css/font-awesome.min.css'>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="/css/collab.css">
 
 </head>

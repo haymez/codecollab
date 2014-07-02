@@ -1,0 +1,11 @@
+/*
+ * css for codecollab app
+ */
+
+.codebin
+{
+  width: 100%;
+  height: 500px !important;
+  background-color: #EBEBEB;
+  resize: none;
+}
