@@ -1,5 +1,12 @@
 ---
 layout: default
 ---
+{% raw %}
 
-<h1>White Board</h1>
+  <h1>White Board</h1>
+  <div ng-controller='WhiteboardController'>
+    <input type='text' ng-model='data'> 
+    <h1>{{data}}</h1>
+  </div>
+
+{% endraw %}
