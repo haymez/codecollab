@@ -2,10 +2,25 @@
  * css for codecollab app
  */
 
+canvas
+{
+  border: ridge;
+}
+
+canvas:hover
+{
+  cursor: crosshair;
+}
+
 .codebin
 {
   width: 100%;
   height: 500px !important;
   background-color: #EBEBEB;
   resize: none;
+}
+
+.center
+{
+  text-align: center;
 }
