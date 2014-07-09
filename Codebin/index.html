@@ -3,5 +3,7 @@ layout: default
 ---
 
 <div ng-controller='CodebinController'>
-  <textarea class='codebin form-control' ng-model='code'>{{code}}</textarea>
+  <textarea id='textArea' class='codebin form-control' ng-model='code' ui-codemirror ui-codemirror-opts="editorOptions">
+    {{code}}
+  </textarea>
 </div>

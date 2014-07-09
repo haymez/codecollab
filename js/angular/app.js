@@ -1,1 +1,1 @@
-var app = angular.module('codecollab', ['ui.bootstrap', 'firebase']);
+var app = angular.module('codecollab', ['ui.bootstrap', 'firebase', 'ui.codemirror']);
