@@ -3,7 +3,6 @@
  */
 
 function fn($scope, $firebase, whiteboardService) {
-  // whiteboardService.$bind($scope, 'data');
   var canvas = $('#canvas');
   var x;
   var y;
