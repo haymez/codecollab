@@ -7,12 +7,10 @@ function fn($scope, $firebase, whiteboardService) {
   var canvas = $('#canvas');
   var x;
   var y;
-  var dragging = false;
-  var color = 'black';
 
   $scope.clear = function() {
     var ctx = canvas[0].getContext('2d');
-    ctx.clearRect (0, 0, canvas.width(), canvas.height());
+    ctx.clearRect (0, 0, 800, 500);
   }
 
   $scope.clearData = function() {
@@ -21,24 +19,16 @@ function fn($scope, $firebase, whiteboardService) {
 
   canvas.on('vmousemove', function(evt) {
     evt.preventDefault();
-    x = Math.round(evt.clientX - canvas.offset().left);
-    y = Math.round(evt.clientY - canvas.offset().top);
+    x = Math.round((evt.clientX - canvas.offset().left) / xScale);
+    y = Math.round(((evt.clientY - canvas.offset().top) / yScale) + scrollValue);
     if(dragging) {
-      var ctx = canvas[0].getContext('2d');
-      ctx.beginPath();
-      ctx.fillStyle = color;
-      ctx.arc(x,y,5,0,2*Math.PI);
-      ctx.fill();
-
-      //save
-      whiteboardService.$add({x: x, y: y, color: color});
+      whiteboardService.$add({x: x, y: y, color: color, last: !dragging});
     }
-  });
-
-  canvas.on('vmousedown', function(evt) {
-    dragging = true;
   }).on('vmouseup', function(evt) {
-    dragging = false;
+    evt.preventDefault();
+    x = Math.round((evt.clientX - canvas.offset().left) / xScale);
+    y = Math.round(((evt.clientY - canvas.offset().top) / yScale) + scrollValue);
+    whiteboardService.$add({x: x, y: y, color: color, last: true});
   });
 
   $('button').click(function(evt) {
@@ -54,12 +44,27 @@ function fn($scope, $firebase, whiteboardService) {
   whiteboardService.$on('value', function(snapshot) {
     $scope.clear();
     if(snapshot !== undefined) {
+      var prevCircle = null;
       angular.forEach(snapshot.snapshot.value, function(circle) {
         var ctx = canvas[0].getContext('2d');
+        // ctx.beginPath();
+        // ctx.fillStyle = circle.color;
+        // ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
+        // ctx.fill();
+        
+        ctx.strokeStyle = circle.color;
+        ctx.lineJoin = "round";
+        ctx.lineWidth = 5;
         ctx.beginPath();
-        ctx.fillStyle = circle.color;
-        ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
-        ctx.fill();
+        if(prevCircle !== null && !prevCircle.last) {
+          ctx.moveTo(prevCircle.x, prevCircle.y);
+        } else {
+          ctx.moveTo(circle.x-1, circle.y)
+        }
+        ctx.lineTo(circle.x, circle.y);
+        ctx.closePath();
+        ctx.stroke();
+        prevCircle = circle;
       });
     }
   });
