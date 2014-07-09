@@ -8,6 +8,10 @@ function fn($scope, $firebase, whiteboardService) {
   var x;
   var y;
 
+  $scope.lineType = 'dotMode';
+  $scope.lineTypes = ['dotMode', 'lineMode'];
+  
+
   $scope.clear = function() {
     var ctx = canvas[0].getContext('2d');
     ctx.clearRect (0, 0, 800, 500);
@@ -47,24 +51,27 @@ function fn($scope, $firebase, whiteboardService) {
       var prevCircle = null;
       angular.forEach(snapshot.snapshot.value, function(circle) {
         var ctx = canvas[0].getContext('2d');
-        // ctx.beginPath();
-        // ctx.fillStyle = circle.color;
-        // ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
-        // ctx.fill();
-        
-        ctx.strokeStyle = circle.color;
-        ctx.lineJoin = "round";
-        ctx.lineWidth = 5;
-        ctx.beginPath();
-        if(prevCircle !== null && !prevCircle.last) {
-          ctx.moveTo(prevCircle.x, prevCircle.y);
+        if(dotMode) {
+          ctx.beginPath();
+          ctx.fillStyle = circle.color;
+          ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
+          ctx.fill();          
         } else {
-          ctx.moveTo(circle.x-1, circle.y)
+          ctx.strokeStyle = circle.color;
+          ctx.lineJoin = "round";
+          ctx.lineWidth = 5;
+          ctx.beginPath();
+          if(prevCircle !== null && !prevCircle.last) {
+            ctx.moveTo(prevCircle.x, prevCircle.y);
+          } else {
+            ctx.moveTo(circle.x-1, circle.y)
+          }
+          ctx.lineTo(circle.x, circle.y);
+          ctx.closePath();
+          ctx.stroke();
+          prevCircle = circle;
         }
-        ctx.lineTo(circle.x, circle.y);
-        ctx.closePath();
-        ctx.stroke();
-        prevCircle = circle;
+        
       });
     }
   });

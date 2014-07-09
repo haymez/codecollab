@@ -9,6 +9,7 @@ var dragging = false;
 var xScale = 1;
 var yScale = 1;
 var scrollValue = 0;
+var dotMode = true;
 
 function resize() {
   var canvas = $("#canvas");
@@ -90,3 +91,9 @@ $(document.body).on('vmousedown', function(evt) {
 $(document).on('scroll', function(evt) {
   scrollValue = $(this).scrollTop();
 })
+
+function getDistance(x, y, x2, y2) {
+  var X = x2-x;
+  var Y = y2-y;
+  return Math.sqrt(Math.pow(X, 2) + Math.pow(Y, 2));
+}
