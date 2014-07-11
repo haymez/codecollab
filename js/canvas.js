@@ -4,15 +4,17 @@
 
 // Global variables
 var color = 'black';
+var lineSize = 5;
 var page = $(window);
+var canvas = $("#canvas");
 var dragging = false;
 var xScale = 1;
 var yScale = 1;
 var scrollValue = 0;
 var dotMode = true;
+var uniqueID;
 
 function resize() {
-  var canvas = $("#canvas");
   var ctx = canvas[0].getContext('2d');
   var xOffset = 0;
   var yOffset = 0;
@@ -63,18 +65,41 @@ function redraw(canvas, ctx) {
   ctx.clearRect(0, 0, canvas.width(), canvas.height());
   boardRef.once('value', function(snapshot) {
     if(snapshot.val() !== undefined) {
+      var prevCircle = null;
       $.each(snapshot.val(), function(index, circle) {
         var ctx = canvas[0].getContext('2d');
-        ctx.beginPath();
-        ctx.fillStyle = circle.color;
-        ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
-        ctx.fill();
+        if(dotMode) {
+          ctx.beginPath();
+          ctx.fillStyle = circle.color;
+          ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
+          ctx.fill();          
+        } else {
+          ctx.strokeStyle = circle.color;
+          ctx.lineJoin = "round";
+          ctx.lineWidth = circle.lineSize;
+          ctx.beginPath();
+          if(prevCircle !== null && !prevCircle.last) {
+            ctx.moveTo(prevCircle.x, prevCircle.y);
+          } else {
+            ctx.moveTo(circle.x-1, circle.y)
+          }
+          ctx.lineTo(circle.x, circle.y);
+          ctx.closePath();
+          ctx.stroke();
+          prevCircle = circle;
+        }
+        // var ctx = canvas[0].getContext('2d');
+        // ctx.beginPath();
+        // ctx.fillStyle = circle.color;
+        // ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
+        // ctx.fill();
       });
     }
   });
 }
 
 $(document).ready(function() {
+  uniqueID = Math.random();
   resize();
 });
 
@@ -82,7 +107,7 @@ page.resize(function() {
   resize();
 });
 
-$(document.body).on('vmousedown', function(evt) {
+canvas.on('vmousedown', function(evt) {
   dragging = true;
 }).on('vmouseup', function(evt) {
   dragging = false;

@@ -3,7 +3,17 @@ layout: default
 ---
 
 <div ng-controller='CodebinController'>
-  <textarea id='textArea' class='codebin form-control' ng-model='code' ui-codemirror ui-codemirror-opts="editorOptions">
+  <div class='row well'>
+    <div class='col-md-6'>
+      <label>Language: </label>
+      <select class='form-control' ng-model='codeType' ng-options='item for item in modes'></select>
+    </div>
+    <div class='col-md-6'>
+      <label>Editor Theme: </label>
+      <select class='form-control' ng-model='theme' ng-options='item for item in themes'></select>
+    </div>
+  </div>
+  <textarea ng-model='code' ui-codemirror='editorOptions'>
     {{code}}
   </textarea>
-</div>
+ </div>

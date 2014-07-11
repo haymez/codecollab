@@ -7,9 +7,30 @@ function fn($scope, $firebase, whiteboardService) {
   var x;
   var y;
 
-  $scope.lineType = 'dotMode';
+  $scope.lineType = 'lineMode';
   $scope.lineTypes = ['dotMode', 'lineMode'];
+  $scope.$watch('lineType', function() {
+    dotMode = $scope.lineType.indexOf('dotMode') >= 0
+  });
   
+  $scope.color = 'black';
+  $scope.colors = ['black', 'red', 'blue', 'green', 'brown', 'purple', 'white'];
+  $scope.$watch('color', function() {
+    color = $scope.color;
+  });
+
+  $scope.lineSize = 'Medium';
+  $scope.lineSizes = ['Small', 'Medium', 'Large', 'Extra Large'];
+  $scope.$watch('lineSize', function() {
+    if($scope.lineSize.indexOf('Small') >= 0)
+      lineSize = 2;
+    else if($scope.lineSize.indexOf('Medium') >= 0)
+      lineSize = 5;
+    else if($scope.lineSize.indexOf('Large') >= 0 && $scope.lineSize.indexOf('Extra') == -1)
+      lineSize = 10;
+    else if($scope.lineSize.indexOf('Extra') >= 0)
+      lineSize = 20;
+  });
 
   $scope.clear = function() {
     var ctx = canvas[0].getContext('2d');
@@ -25,13 +46,25 @@ function fn($scope, $firebase, whiteboardService) {
     x = Math.round((evt.clientX - canvas.offset().left) / xScale);
     y = Math.round(((evt.clientY - canvas.offset().top) / yScale) + scrollValue);
     if(dragging) {
-      whiteboardService.$add({x: x, y: y, color: color, last: !dragging});
+      whiteboardService.$add({
+        x: x, y: y,
+        color: color,
+        lineSize: lineSize,
+        last: !dragging,
+        uniqueID: uniqueID
+      });
     }
   }).on('vmouseup', function(evt) {
     evt.preventDefault();
     x = Math.round((evt.clientX - canvas.offset().left) / xScale);
     y = Math.round(((evt.clientY - canvas.offset().top) / yScale) + scrollValue);
-    whiteboardService.$add({x: x, y: y, color: color, last: true});
+    whiteboardService.$add({
+        x: x, y: y,
+        color: color,
+        lineSize: lineSize,
+        last: true,
+        uniqueID: uniqueID
+      });
   });
 
   $('button').click(function(evt) {
@@ -58,9 +91,9 @@ function fn($scope, $firebase, whiteboardService) {
         } else {
           ctx.strokeStyle = circle.color;
           ctx.lineJoin = "round";
-          ctx.lineWidth = 5;
+          ctx.lineWidth = circle.lineSize;
           ctx.beginPath();
-          if(prevCircle !== null && !prevCircle.last) {
+          if(prevCircle !== null && !prevCircle.last && circle.uniqueID == prevCircle.uniqueID) {
             ctx.moveTo(prevCircle.x, prevCircle.y);
           } else {
             ctx.moveTo(circle.x-1, circle.y)
