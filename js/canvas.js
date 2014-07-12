@@ -99,7 +99,7 @@ function redraw(canvas, ctx) {
 }
 
 $(document).ready(function() {
-  uniqueID = Math.random();
+  uniqueID = Math.floor(Math.random()*10000);
   resize();
 });
 
