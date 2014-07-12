@@ -8,10 +8,6 @@ layout: default
       <div class='well'>
         <div class='container'>
           <div class='col-md-3'>
-            <label>Clear WhiteBoard: </label>
-            <button id='clear' class='btn btn-default col-md-12'>Clear</button>
-          </div>
-          <div class='col-md-3'>
             <label>Line Type: </label>
             <select class='form-control' ng-model='lineType' ng-options='item for item in lineTypes'></select>
           </div>
@@ -22,6 +18,10 @@ layout: default
           <div class='col-md-3'>
             <label>Line Color: </label>
             <select class='form-control' ng-model='color' ng-options='item for item in colors'></select>
+          </div>
+          <div class='col-md-3'>
+            <label>Clear WhiteBoard: </label>
+            <button id='clear' class='btn btn-default col-md-12'>Clear</button>
           </div>
         </div>
       </div>

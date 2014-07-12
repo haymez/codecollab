@@ -62,40 +62,7 @@ function resize() {
 
 function redraw(canvas, ctx) {
   var boardRef = new Firebase('https://codecollab.firebaseio.com/collaborations/collab1/whiteboard/data');
-  ctx.clearRect(0, 0, canvas.width(), canvas.height());
-  boardRef.once('value', function(snapshot) {
-    if(snapshot.val() !== undefined) {
-      var prevCircle = null;
-      $.each(snapshot.val(), function(index, circle) {
-        var ctx = canvas[0].getContext('2d');
-        if(dotMode) {
-          ctx.beginPath();
-          ctx.fillStyle = circle.color;
-          ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
-          ctx.fill();          
-        } else {
-          ctx.strokeStyle = circle.color;
-          ctx.lineJoin = "round";
-          ctx.lineWidth = circle.lineSize;
-          ctx.beginPath();
-          if(prevCircle !== null && !prevCircle.last) {
-            ctx.moveTo(prevCircle.x, prevCircle.y);
-          } else {
-            ctx.moveTo(circle.x-1, circle.y)
-          }
-          ctx.lineTo(circle.x, circle.y);
-          ctx.closePath();
-          ctx.stroke();
-          prevCircle = circle;
-        }
-        // var ctx = canvas[0].getContext('2d');
-        // ctx.beginPath();
-        // ctx.fillStyle = circle.color;
-        // ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
-        // ctx.fill();
-      });
-    }
-  });
+  boardRef.push({test: 'hey'});
 }
 
 $(document).ready(function() {

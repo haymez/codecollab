@@ -18,6 +18,9 @@ function fn($scope, $firebase, whiteboardService) {
   $scope.$watch('color', function() {
     color = $scope.color;
   });
+  $scope.$watch('lineType', function() {
+    redraw();
+  });
 
   $scope.lineSize = 'Medium';
   $scope.lineSizes = ['Small', 'Medium', 'Large', 'Extra Large'];
@@ -78,35 +81,45 @@ function fn($scope, $firebase, whiteboardService) {
   });
 
   whiteboardService.$on('value', function(snapshot) {
-    $scope.clear();
-    if(snapshot !== undefined) {
-      var prevCircle = null;
-      angular.forEach(snapshot.snapshot.value, function(circle) {
-        var ctx = canvas[0].getContext('2d');
-        if(dotMode) {
-          ctx.beginPath();
-          ctx.fillStyle = circle.color;
-          ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
-          ctx.fill();          
-        } else {
-          ctx.strokeStyle = circle.color;
-          ctx.lineJoin = "round";
-          ctx.lineWidth = circle.lineSize;
-          ctx.beginPath();
-          if(prevCircle !== null && !prevCircle.last && circle.uniqueID == prevCircle.uniqueID) {
-            ctx.moveTo(prevCircle.x, prevCircle.y);
-          } else {
-            ctx.moveTo(circle.x-1, circle.y)
-          }
-          ctx.lineTo(circle.x, circle.y);
-          ctx.closePath();
-          ctx.stroke();
-          prevCircle = circle;
-        }
-        
-      });
-    }
+    drawLines(snapshot);
   });
+
+  var drawLines = function(object) {
+    $scope.clear();
+    var finished = [];
+    angular.forEach(object.snapshot.value, function(parentCircle) {
+      if(finished.indexOf(parentCircle.uniqueID) === -1) {
+        finished.push(parentCircle.uniqueID);
+        var currID = parentCircle.uniqueID;
+        var prevCircle = null;
+        angular.forEach(object.snapshot.value, function(circle) {
+          if(currID === circle.uniqueID) {
+            var ctx = canvas[0].getContext('2d');
+            if(dotMode) {
+              ctx.beginPath();
+              ctx.fillStyle = circle.color;
+              ctx.arc(circle.x,circle.y,5,0,2*Math.PI);
+              ctx.fill();          
+            } else {
+              ctx.strokeStyle = circle.color;
+              ctx.lineJoin = "round";
+              ctx.lineWidth = circle.lineSize;
+              ctx.beginPath();
+              if(prevCircle !== null && !prevCircle.last && circle.uniqueID == prevCircle.uniqueID) {
+                ctx.moveTo(prevCircle.x, prevCircle.y);
+              } else {
+                ctx.moveTo(circle.x-1, circle.y)
+              }
+              ctx.lineTo(circle.x, circle.y);
+              ctx.closePath();
+              ctx.stroke();
+            }
+            prevCircle = circle;
+          }
+        });
+      }
+    });
+  }
 }
 
 app.controller('WhiteboardController', ['$scope', '$firebase', 'whiteboardService', fn]);
