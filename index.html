@@ -2,5 +2,39 @@
 layout: default
 ---
 
-<h1>Home/Login screen</h1>
-<p>Show list of collaborations</p>
+{% raw %}
+  
+  <div ng-controller='DashboardController'>
+    <div ng-hide='$root.user'>
+      <div class='well container login-form'>
+        <form class='input-group' ng-hide='newUserForm'>
+          <h3 style='margin-top:0px;'>Log in</h3>
+          <input type='text' class='form-control' ng-model='email' placeholder='Email'>
+          <input type='password' class='form-control' ng-model='password' placeholder='Password'>
+          <button class='btn btn-success' ng-click='login()'>Log in</button>
+          <button class='btn btn-primary' ng-click='newUserForm=!newUserForm'>
+            New Account
+            <span class='fa fa-caret-down'></span>
+          </button>
+        </form>
+        <form class='input-group' ng-show='newUserForm'>
+          <h3>Create New Account</h3>
+          <input type='text' class='form-control' ng-model='firstName' placeholder='First Name'>
+          <input type='text' class='form-control' ng-model='lastName' placeholder='Last Name'>
+          <input type='text' class='form-control' ng-model='email' placeholder='Email'>
+          <input type='password' class='form-control' ng-model='password' placeholder='Password'>
+          <button class='btn btn-primary' ng-click='createUser()'>Create Account</button>
+          <button class='btn btn-success' ng-click='newUserForm=!newUserForm'>
+            Log in to Existing Account
+            <span class='fa fa-caret-up'></span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div ng-show='$root.user'>
+      <h1 ng-model='userInfo'>Welcome to the Dashboard, {{userInfo.value.firstName}}!</h1>
+    </div>
+  </div>
+
+{% endraw %}

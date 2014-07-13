@@ -39,3 +39,14 @@ canvas:hover
 {
   display:inline;
 }
+
+.login-form
+{
+  text-align: center;
+  width: 30%;
+}
+
+.body-style
+{
+  /*background-color: #FFFFDE;*/
+}
