@@ -32,8 +32,43 @@ layout: default
       </div>
     </div>
 
-    <div ng-show='$root.user'>
-      <h1 ng-model='userInfo'>Welcome to the Dashboard, {{userInfo.value.firstName}}!</h1>
+    <div class='center' ng-show='$root.user'>
+      <h3 ng-model='userInfo'>Welcome to the Dashboard, {{userInfo.value.firstName}}</h3>
+      <div class='well'>
+        <div class=''>
+          <h4>Create New Collaboration</h4>
+          <form>
+            <input class='form-control' type='text' ng-model='collabName' placeholder='Name'>
+            <button class='btn btn-primary' ng-click='createCollab()'>Create new Collaboration</button>
+          </form>
+        </div>
+      </div>
+      <div class='well'>
+        <h5>Current Collaborations:</h5>
+        <table class='table table-striped table-hover'>
+          <thead>
+            <th>
+              Name
+            </th>
+            <th>
+              Users Involved
+            </th>
+            <th>
+              Date Created
+            </th>
+          </thead>
+          <tr ng-repeat='collab in collabList'>
+            <td>{{collab.name}}</td>
+            <td>
+              <p ng-repeat='user in collab.collaborators'>{{user.name}}</p>
+            </td>
+            <td>collab.timestamp</td>
+          </tr>
+        </table>
+      </div>
+      <div class='well'>
+        <h5>Friends Collaborations:</h5>
+      </div>
     </div>
   </div>
 

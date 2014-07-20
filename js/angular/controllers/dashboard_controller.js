@@ -9,7 +9,9 @@ function fn($scope, $rootScope, $firebase, $firebaseSimpleLogin, authenticationS
   $scope.email = '';
   $scope.password = '';
   $scope.newUserForm = false;
-
+  $scope.collabList = $firebase(new Firebase('https://codecollab.firebaseio.com/user/collab_list'));
+  $scope.collabName = '';
+  
   $scope.login = function() {
     authenticationService.$login('password', {
       email: $scope.email,
