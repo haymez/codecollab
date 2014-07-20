@@ -9,8 +9,28 @@ function fn($scope, $rootScope, $firebase, $firebaseSimpleLogin, authenticationS
   $scope.email = '';
   $scope.password = '';
   $scope.newUserForm = false;
-  $scope.collabList = $firebase(new Firebase('https://codecollab.firebaseio.com/user/collab_list'));
   $scope.collabName = '';
+
+  $scope.$watch('userInfo', function() {
+    if(!!$scope.userInfo) {
+      $scope.collabList = $firebase(new Firebase('https://codecollab.firebaseio.com/users/' + 
+      $scope.userInfo.name + '/collab_list'));
+    }
+  });
+
+  $scope.toDate = function(date) {
+    return new Date(date).toString();
+  }
+
+  $scope.createCollab = function() {
+    $scope.collabList.$add({
+      name: $scope.collabName,
+      timestamp: new Date().getTime(),
+      codebin: {code: '', code_type: '', theme: ''},
+      whiteboard: {data: ''},
+      chat: ''
+    })
+  }
   
   $scope.login = function() {
     authenticationService.$login('password', {

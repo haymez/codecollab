@@ -47,22 +47,18 @@ layout: default
         <h5>Current Collaborations:</h5>
         <table class='table table-striped table-hover'>
           <thead>
-            <th>
+            <th style='text-align:center'>
               Name
             </th>
-            <th>
-              Users Involved
-            </th>
-            <th>
+            <th style='text-align:center'>
               Date Created
             </th>
           </thead>
           <tr ng-repeat='collab in collabList'>
             <td>{{collab.name}}</td>
             <td>
-              <p ng-repeat='user in collab.collaborators'>{{user.name}}</p>
+              {{toDate(collab.timestamp)}}
             </td>
-            <td>collab.timestamp</td>
           </tr>
         </table>
       </div>
