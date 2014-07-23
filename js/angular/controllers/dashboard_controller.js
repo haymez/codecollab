@@ -24,18 +24,19 @@ function fn($scope, $rootScope, $firebase, $firebaseSimpleLogin, authenticationS
 
   $scope.createCollab = function() {
     $scope.collabList.$add({
-      name: $scope.collabName,
-      timestamp: new Date().getTime(),
-      codebin: {code: '', code_type: '', theme: ''},
-      whiteboard: {data: ''},
-      chat: ''
-    })
+      name       : $scope.collabName,
+      timestamp  : new Date().getTime(),
+      codebin    : {code: '', code_type: '', theme: ''},
+      whiteboard : {data: ''},
+      chat       : ''
+    });
+    $scope.collabName = '';
   }
   
   $scope.login = function() {
     authenticationService.$login('password', {
-      email: $scope.email,
-      password: $scope.password
+      email    : $scope.email,
+      password : $scope.password
     }).then(function(user) {
       //Logged in succesfully
     }, function(error) {
@@ -47,9 +48,9 @@ function fn($scope, $rootScope, $firebase, $firebaseSimpleLogin, authenticationS
     .then(function(user) {
       console.log(user);
       userService.$child(user.id).$set({
-        firstName: $scope.firstName,
-        lastName: $scope.lastName,
-        email: $scope.email
+        firstName : $scope.firstName,
+        lastName  : $scope.lastName,
+        email     : $scope.email
       });
     }, function(error) {
       console.log(error);
@@ -72,9 +73,9 @@ function fn($scope, $rootScope, $firebase, $firebaseSimpleLogin, authenticationS
   $scope.$watch('$root.user', function() {
     if($rootScope.user === null) {
       $scope.firstName = '';
-      $scope.lastName = '';
-      $scope.email = '';
-      $scope.password = '';
+      $scope.lastName  = '';
+      $scope.email     = '';
+      $scope.password  = '';
     }
   });
 }
